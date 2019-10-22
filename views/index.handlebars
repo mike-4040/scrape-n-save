@@ -1,36 +1,25 @@
 <div class="container">
   <div class="row">
     <div class="col-md-10">
-      <div class="card my-2">
-        <div class="row">
-          <div class="col-md-2">
-            <img src="https://photos5.appleinsider.com/article_thumbs/frontpage/50335.jpg" class="card-img m-2">
-          </div>
-          <div class="col-md-10">
-            <div class="card-body">
-              <a href="https://appleinsider.com/articles/19/10/21/adobe-all-in-on-photoshop-for-ipad-despite-missing-features-illustrator-for-ipad-reportedly-due-in-2020" target="_blank"><h5 class="card-title">Article title</h5></a>
-              <hr>
-              <div class="d-flex">
-                <p class="card-text flex-grow-1">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <button type="button" class="btn btn-info">Save</button>
+      {{#each articles}}
+        <div class="card my-2">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="{{image}}" class="card-img m-2">
+            </div>
+            <div class="col-md-10">
+              <div class="card-body">
+                <a href="{{link}}" target="_blank"><h5 class="card-title">{{title}}</h5></a>
+                <hr>
+                <div class="d-flex">
+                  <p class="card-text flex-grow-1">{{description}}</p>
+                  <button type="button" class="btn btn-info">Save</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-       <div class="card my-2">
-        <div class="card-body">
-          <div class="d-flex">
-            <h5 class="card-title flex-grow-1">Article title</h5>
-            <h5 class="card-title">Date</h5>
-          </div>
-          <hr>
-          <div class="d-flex">
-            <p class="card-text flex-grow-1">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <button type="button" class="btn btn-info">Save</button>
-          </div>
-        </div>
-      </div>
+      {{/each}}
     </div>
     <div class="col-md-2">
         <p><button type="button" class="btn btn-primary w-100">Save</button></p>

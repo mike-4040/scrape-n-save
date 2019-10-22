@@ -1,9 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const axios = require("axios");
-const cheerio = require("cheerio");
+const axios = require('axios');
+const cheerio = require('cheerio');
+//??
+const mongoose = require('mongoose');
 
-router.get('/', (req, res) => res.render('index'));
+mongoose.connect('mongodb://localhost/scrap-n-save', { useNewUrlParser: true });
+const db = require("../models");
+
+router.get('/', (req, res) => {
+  db.Article.find()
+        .then(function(dbArticle) {
+          res.render('index', {articles: dbArticle});
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+});
 
 router.get('/scrape', function (req, res) {
   axios.get('https://appleinsider.com').then(function (response) {
@@ -17,20 +30,26 @@ router.get('/scrape', function (req, res) {
         description: $(element).find('.post-description').text()
       })
     });
-    res.json(articles[0]);
+    db.Article.create(articles)
+        .then(function(dbArticle) {
+          res.redirect(200, '/');
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
   });
 });
-    
-    router.post('/api/burgers', (req, res) =>
-      burger.create('burger_name', req.body.name, result => res.json({ id: result.insertId }))
-    );
-    
-    router.put('/api/burgers/:id', (req, res) =>
-      burger.update('devoured', req.body.devoured == 'true', req.params.id, result => {
-        if (result.changedRows == 0) res.status(404).end();
-        res.status(200).end();
-      })
-    );
-    
-    module.exports = router;
+
+router.post('/api/burgers', (req, res) =>
+  burger.create('burger_name', req.body.name, result => res.json({ id: result.insertId }))
+);
+
+router.put('/api/burgers/:id', (req, res) =>
+  burger.update('devoured', req.body.devoured == 'true', req.params.id, result => {
+    if (result.changedRows == 0) res.status(404).end();
+    res.status(200).end();
+  })
+);
+
+module.exports = router;
     
