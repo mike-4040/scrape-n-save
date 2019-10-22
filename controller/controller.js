@@ -5,38 +5,32 @@ const cheerio = require("cheerio");
 
 router.get('/', (req, res) => res.render('index'));
 
-router.post('/api/burgers', (req, res) =>
-  burger.create('burger_name', req.body.name, result => res.json({ id: result.insertId }))
-);
-
-router.put('/api/burgers/:id', (req, res) =>
-  burger.update('devoured', req.body.devoured == 'true', req.params.id, result => {
-    if (result.changedRows == 0) res.status(404).end();
-    res.status(200).end();
-  })
-);
-
-
 router.get('/scrape', function (req, res) {
-  axios.get("https://appleinsider.com").then(function (response) {
+  axios.get('https://appleinsider.com').then(function (response) {
     const $ = cheerio.load(response.data);
     let articles = [];
     $(".post").each(function (i, element) {
       articles.push({
         title: $(element).find("h1 a").text(),
-        link: $(element).find("a").attr("href")
+        link: $(element).find("a").attr("href"),
+        image: $(element).find('.river-img-wrap img').attr('data-original'),
+        description: $(element).find('.post-description').text()
       })
-      // res.send('Scraping');
-      // db.scrapedData.insert({
-      //   title: $(element).find("h1 a").text(),
-      //   link: $(element).find("a").attr("href")
-      // }, function (err) {
-      //   if (err)
-      //     res.send("Error").end();
-      // });
     });
-    res.json(articles);  
+    res.json(articles[0]);
   });
 });
-
-module.exports = router;
+    
+    router.post('/api/burgers', (req, res) =>
+      burger.create('burger_name', req.body.name, result => res.json({ id: result.insertId }))
+    );
+    
+    router.put('/api/burgers/:id', (req, res) =>
+      burger.update('devoured', req.body.devoured == 'true', req.params.id, result => {
+        if (result.changedRows == 0) res.status(404).end();
+        res.status(200).end();
+      })
+    );
+    
+    module.exports = router;
+    
