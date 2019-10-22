@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
-const cheerio = require('cheerio');
-//??
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/scrap-n-save', { useNewUrlParser: true });
 const db = require("../models");
+const scrapeAppleInsider = require('../utilities/scrapeAI')
 
 router.get('/', (req, res) => {
   db.Article.find()
@@ -19,25 +17,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/scrape', function (req, res) {
-  axios.get('https://appleinsider.com').then(function (response) {
-    const $ = cheerio.load(response.data);
-    let articles = [];
-    $(".post").each(function (i, element) {
-      articles.push({
-        title: $(element).find("h1 a").text(),
-        link: $(element).find("a").attr("href"),
-        image: $(element).find('.river-img-wrap img').attr('data-original'),
-        description: $(element).find('.post-description').text()
-      })
-    });
-    db.Article.create(articles)
-        .then(function(dbArticle) {
-          res.redirect(200, '/');
-        })
-        .catch(function(err) {
-          console.log(err);
-        });
-  });
+  scrapeAppleInsider((articles) =>
+    db.Article
+      .create(articles)
+      .then(() => res.redirect('/'))
+      .catch(err => console.log(err))  
+  )
 });
 
 router.post('/api/burgers', (req, res) =>
