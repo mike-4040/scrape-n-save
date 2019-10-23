@@ -3,17 +3,15 @@ $("#scrape").on("click", function () {
     .fail(() => console.log( 'Can"t get scraped articles' ));
 });
 
-
-// Grab the articles as a json
-// $.getJSON("/articles", function(data) {
-//   // For each one
-//   for (var i = 0; i < data.length; i++) {
-//     // Display the apropos information on the page
-//     $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//   }
-// });
-
-
+$('.card-body button').on('click', function () {
+  $.ajax('/api/article/', {
+    type: 'PUT',
+    data: {id: $(this).attr('id')}
+  }).then(function() {
+    location.reload();
+  });
+});
+ 
 // // Whenever someone clicks a p tag
 // $(document).on("click", "p", function() {
 //   // Empty the notes from the note section
