@@ -1,12 +1,7 @@
-$("#scrape").on("click", function () {
-  $.getJSON('/scrape', data => console.log(JSON.stringify(data)))
-    .fail(() => console.log( 'Can"t get scraped articles' ));
-});
-
 $('.card-body button').on('click', function () {
   $.ajax('/api/article/', {
     type: 'PUT',
-    data: {id: $(this).attr('id')}
+    data: {id: $(this).attr('data-id')}
   }).then(function() {
     location.reload();
   });
