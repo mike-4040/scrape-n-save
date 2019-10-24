@@ -10,15 +10,10 @@
 				<div class="d-flex">
 					<p class="card-text flex-grow-1">{{description}}</p>
 					{{#if saved}}
-						<button data-id="{{_id}}" type="button" class="btn btn-danger">Remove</button>
-						<button data-id="{{_id}}" type="button" class="btn btn-info">Notes</button>
-						<button data-id="{{_id}}" type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModal">
-							Notes
-						</button>
-
-
+						<button data-id="{{_id}}" data-action="remove" type="button" class="btn btn-danger">Remove</button>
+						<button data-id="{{_id}}" data-action="notes" type="button" class="btn btn-info" data-toggle="modal" data-target="#notesModal">Notes</button>
 					{{else}}
-						<button data-id="{{_id}}" type="button" class="btn btn-success">Save</button>
+						<button data-id="{{_id}}" data-action="save" type="button" class="btn btn-success">Save</button>
 					{{/if}}
 				</div>
 			</div>

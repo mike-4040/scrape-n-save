@@ -1,11 +1,35 @@
-$('.card-body button').on('click', function () {
-  $.ajax('/api/article/', {
+$('.card-body button[data-action="save"]').on('click', function () {
+  $.ajax('/api/article/save', {
     type: 'PUT',
     data: {id: $(this).attr('data-id')}
   }).then(function() {
     location.reload();
   });
 });
+
+$('.card-body button[data-action="remove"]').on('click', function () {
+  $.ajax('/api/article/remove', {
+    type: 'PUT',
+    data: {id: $(this).attr('data-id')}
+  }).then(function() {
+    location.reload();
+  });
+});
+
+$('#notesModal').on('show.bs.modal', function (event) {
+  const button = $(event.relatedTarget)
+  const articleId = button.data('id')
+  console.log('Note Article Id', articleId)
+  $.ajax(`/api/notes/${articleId}`, { type: 'GET' })
+    .then(result => console.log(result))
+
+})
+
+$('#save-note').on('click', function (event) {
+  console.log('Saving notes');
+  $.ajax('/api/notes', { type: 'POST', data: { id: 42, title: "Note"} })
+    .then(result => console.log(result))
+})
  
 // // Whenever someone clicks a p tag
 // $(document).on("click", "p", function() {

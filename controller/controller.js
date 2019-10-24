@@ -38,12 +38,41 @@ router.get('/clear', (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.put('/api/article', function (req, res) {
+router.put('/api/article/save', function (req, res) {
   db.Article
     .updateOne({_id: req.body.id}, {$set: {saved: true}})
-    .then(() => { console.log('Saved'); res.redirect(200,'/') })
+    .then(() => res.redirect(200,'/') )
     .catch(err => console.log('Can"n update', err)) 
 })
+
+router.put('/api/article/remove', function (req, res) {
+  db.Article
+    .updateOne({_id: req.body.id}, {$set: {saved: false}})
+    .then(() => res.redirect(200,'/'))
+    .catch(err => console.log('Can"n update', err)) 
+})
+
+router.get('/api/notes/:id', function (req, res) {
+  console.log('Got request for Notes', req.params.id);
+  res.json({ message: 'Ok' });
+  db.Note
+  //   .updateOne({_id: req.body.id}, {$set: {saved: false}})
+  //   .then(() => res.redirect(200,'/'))
+  //   .catch(err => console.log('Can"n update', err)) 
+
+
+
+})
+
+router.post("/api/notes", (req, res) => {
+  console.log(req.body);
+  db.Note.create(req.body)
+    .then(dbNote => {
+      return db.Article.findOneAndUpdate({_id: req.body.articleId}, { $push: { notes: dbNote._id } }, { new: true });
+    })
+    .then(dbArticle => res.json(dbArticle))
+    .catch(err => res.json(err));
+});
 
 module.exports = router;
     
