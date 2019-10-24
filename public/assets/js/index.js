@@ -17,8 +17,9 @@ $('.card-body button[data-action="remove"]').on('click', function () {
 });
 
 $('#notesModal').on('show.bs.modal', function (event) {
-  const button = $(event.relatedTarget)
-  const articleId = button.data('id')
+  const button = $(event.relatedTarget);
+  const articleId = button.data('id');
+  $('#article-title').attr({ 'data-id': articleId }).text('Hello');
   console.log('Note Article Id', articleId)
   $.ajax(`/api/notes/${articleId}`, { type: 'GET' })
     .then(result => console.log(result))
@@ -26,8 +27,11 @@ $('#notesModal').on('show.bs.modal', function (event) {
 })
 
 $('#save-note').on('click', function (event) {
-  console.log('Saving notes');
-  $.ajax('/api/notes', { type: 'POST', data: { id: 42, title: "Note"} })
+  const note = $('#new-note').val().trim();
+  if (note.length === 0) return;
+  const articleId = $('#article-title').attr('data-id')
+  console.log('Saving notes', note, articleId);
+  $.ajax('/api/notes', { type: 'POST', data: { note: note, articleId: articleId} })
     .then(result => console.log(result))
 })
  
