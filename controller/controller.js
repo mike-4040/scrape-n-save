@@ -62,7 +62,6 @@ router.get('/api/notes/:id', (req, res) =>
 );
 
 router.post("/api/notes", (req, res) => {
-  console.log(req.body);
   db.Note.create(req.body)
     .then(dbNote => 
       db.Article.updateOne({_id: req.body.articleId}, { $push: { notes: dbNote._id } }, { new: true }))
